@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.gcp-key.json
+key.json
+
+# Cube-generated schema cache (if any)
+.cubejs/
+
+# Logs
+logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+.cubestore
