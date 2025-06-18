@@ -1,6 +1,6 @@
 cubes:
   - name: appointments
-    sql_table: "\"METRICS\".\"APPOINTMENTS\""
+    sql_table: METRICS.APPOINTMENTS
     data_source: default
 
     joins: []
