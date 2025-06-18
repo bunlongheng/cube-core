@@ -247,9 +247,9 @@ cubes:
         measures: [count, revenue]
         dimensions: [status]
         segments: [one_one_appointment]
-        time_dimension: date
-        granularity: day
-        partition_granularity: day
+        #time_dimension: date
+        #granularity: day
+        #partition_granularity: day
         build_range_start: 
           sql: "SELECT TIMESTAMP('2022-01-01')"
         refresh_key:
