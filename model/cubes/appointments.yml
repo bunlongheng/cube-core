@@ -162,16 +162,70 @@ cubes:
       - name: date
         sql: "{CUBE}.\"Date\""
         type: time
+      
+      - name: week_Monday
+        sql: "DATE_TRUNC('week',{CUBE}.\"Date\")"
+        type: time
 
+    segments:
+      - name: one_one_appointment
+        sql: "{CUBE}.\"TYPE\" = 'Appointment'"
+
+      
     measures:
       - name: count
+        sql: "{CUBE}.\"ID\""
         type: count
+
+      - name: revenue
+        sql: "{CUBE}.\"PRICE\""
+        type: sum
 
       - name: duration
         sql: "{CUBE}.\"DURATION\""
         type: sum
 
-    pre_aggregations:
+    pre_aggregations: 
       # Pre-aggregation definitions go here.
       # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+      - name: appointments_by_status_daily
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
 
+      - name: appointments_by_status_table
+        type: rollup
+        measures: [count, revenue]
+        dimensions: [count]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+      - name: appointments_per_staff_daily
+        type: rollup
+        measures: [count, revenue]
+        dimensions: [staff_name]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+    
+    
+    
