@@ -173,20 +173,16 @@ cubes:
 
       
     measures:
-      - name: counts
+      - name: count
         sql: "{CUBE}.ID"
-        type: count
-      
-      - name: counts_test
-        sql: "{CUBE}.\"ID\""
         type: count
 
       - name: revenue
-        sql: "{CUBE}.\"PRICE\""
+        sql: "{CUBE}.PRICE"
         type: sum
 
       - name: duration
-        sql: "{CUBE}.\"DURATION\""
+        sql: "{CUBE}.DURATION"
         type: sum
 
     pre_aggregations: 
@@ -194,7 +190,7 @@ cubes:
       # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
       - name: appointments_by_status_daily
         type: rollup
-        measures: [counts]
+        measures: [count]
         dimensions: [status]
         segments: [one_one_appointment]
         time_dimension: date
@@ -205,10 +201,10 @@ cubes:
         refresh_key:
             every: 1 hour
 
-      - name: appointments_by_status_table
+      - name: appointments_by_status_filters
         type: rollup
-        measures: [counts, revenue]
-        dimensions: [count]
+        measures: [count]
+        dimensions: [status, customer_status, staff_name]
         segments: [one_one_appointment]
         time_dimension: date
         granularity: day
@@ -218,9 +214,51 @@ cubes:
         refresh_key:
             every: 1 hour
 
+      - name: appointments_by_status_weekly
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: week_Monday
+        granularity: week
+        partition_granularity: week
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+      
+
+      - name: appointments_by_status_monthly
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: month
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+
+      - name: appointments_by_status_table
+        type: rollup
+        measures: [count, revenue]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+
       - name: appointments_per_staff_daily
         type: rollup
-        measures: [counts, revenue]
+        measures: [count, revenue]
         dimensions: [staff_name]
         segments: [one_one_appointment]
         time_dimension: date
@@ -230,6 +268,84 @@ cubes:
           sql: "SELECT TIMESTAMP('2022-01-01')"
         refresh_key:
             every: 1 hour
-    
-    
-    
+
+
+      - name: appointments_customer_types_daily
+        type: rollup
+        measures: [count]
+        dimensions: [customer_status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+
+      - name: appointments_by_type_daily
+        type: rollup
+        measures: [count, revenue]
+        dimensions: [type]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+      
+
+      - name: cancelled_appointments_daily
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+
+      - name: rescheduled_appointments_daily
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+
+      - name: recurring_appointments_daily
+        type: rollup
+        measures: [count]
+        dimensions: [frequency_group]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
+      
+      - name: completed_appointments_daily
+        type: rollup
+        measures: [count]
+        dimensions: [status]
+        segments: [one_one_appointment]
+        time_dimension: date
+        granularity: day
+        partition_granularity: day
+        build_range_start: 
+          sql: "SELECT TIMESTAMP('2022-01-01')"
+        refresh_key:
+            every: 1 hour
