@@ -173,8 +173,12 @@ cubes:
 
       
     measures:
-      - name: count
+      - name: counts
         sql: "{CUBE}.ID"
+        type: count
+      
+      - name: counts_test
+        sql: "{CUBE}.\"ID\""
         type: count
 
       - name: revenue
