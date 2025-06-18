@@ -194,7 +194,7 @@ cubes:
       # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
       - name: appointments_by_status_daily
         type: rollup
-        measures: [count]
+        measures: [counts]
         dimensions: [status]
         segments: [one_one_appointment]
         time_dimension: date
@@ -207,7 +207,7 @@ cubes:
 
       - name: appointments_by_status_table
         type: rollup
-        measures: [count, revenue]
+        measures: [counts, revenue]
         dimensions: [count]
         segments: [one_one_appointment]
         time_dimension: date
@@ -220,7 +220,7 @@ cubes:
 
       - name: appointments_per_staff_daily
         type: rollup
-        measures: [count, revenue]
+        measures: [counts, revenue]
         dimensions: [staff_name]
         segments: [one_one_appointment]
         time_dimension: date
